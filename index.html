@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STIQR – Scan. Connect. Recover.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --lime: #CCFF00;
+      --black: #080808;
+      --dark: #0f0f0f;
+      --card: #141414;
+      --border: rgba(255,255,255,0.07);
+      --muted: #555;
+      --text: #ccc;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 60px;
+      background: rgba(8,8,8,0.9);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 3px; color: #fff; }
+    .logo span { color: var(--lime); }
+    nav ul { list-style: none; display: flex; gap: 36px; }
+    nav ul a { color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; transition: color 0.2s; }
+    nav ul a:hover { color: var(--lime); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 120px 60px 80px;
+      position: relative; overflow: hidden; gap: 60px;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -300px; right: -300px;
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(204,255,0,0.05) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-left { position: relative; z-index: 1; }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(204,255,0,0.08); border: 1px solid rgba(204,255,0,0.2);
+      color: var(--lime); font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; padding: 8px 16px; border-radius: 100px;
+      margin-bottom: 28px; animation: fadeUp 0.5s ease both;
+    }
+    .dot { width: 7px; height: 7px; background: var(--lime); border-radius: 50%; animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1;}50%{opacity:0.3;} }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(60px, 8vw, 96px);
+      line-height: 0.92; letter-spacing: 3px; color: #fff; margin-bottom: 24px;
+      animation: fadeUp 0.5s 0.1s ease both;
+    }
+    h1 .lime { color: var(--lime); }
+
+    .hero-desc {
+      font-size: 16px; line-height: 1.75; color: var(--muted);
+      max-width: 460px; font-weight: 300; margin-bottom: 40px;
+      animation: fadeUp 0.5s 0.2s ease both;
+    }
+    .btns { display: flex; gap: 14px; flex-wrap: wrap; animation: fadeUp 0.5s 0.3s ease both; }
+    .btn-lime {
+      background: var(--lime); color: #000; font-size: 13px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase; padding: 15px 30px;
+      border-radius: 100px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-lime:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(204,255,0,0.25); }
+    .btn-outline {
+      background: transparent; color: #fff; font-size: 13px; font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase; padding: 15px 30px;
+      border-radius: 100px; border: 1px solid rgba(255,255,255,0.15);
+      text-decoration: none; transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--lime); color: var(--lime); }
+
+    /* PHONE MOCKUPS */
+    .hero-right {
+      position: relative; z-index: 1;
+      display: flex; justify-content: center; align-items: center;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+    .phone-wrap { position: relative; width: 280px; }
+    .phone {
+      width: 260px; background: #111; border-radius: 40px;
+      border: 2px solid rgba(255,255,255,0.1); overflow: hidden;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+    }
+    .phone-screen {
+      background: #080808; padding: 36px 24px 32px; min-height: 480px;
+      display: flex; flex-direction: column; align-items: flex-start;
+    }
+    .phone-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: #fff; margin-bottom: 40px; }
+    .phone-logo span { color: var(--lime); }
+    .phone-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 1px; color: #fff; line-height: 1; margin-bottom: 8px; }
+    .phone-sub { font-size: 11px; color: var(--muted); margin-bottom: 36px; line-height: 1.5; }
+    .phone-input { width: 100%; color: var(--lime); font-size: 15px; font-weight: 500; border-bottom: 1px solid var(--lime); padding-bottom: 10px; margin-bottom: 36px; }
+    .phone-btn { width: 100%; background: var(--lime); color: #000; font-weight: 700; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; text-align: center; padding: 16px; border-radius: 16px; }
+
+    .phone2 {
+      position: absolute; right: -80px; top: 60px; width: 200px;
+      background: #111; border-radius: 30px; border: 2px solid rgba(255,255,255,0.08);
+      overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.5); opacity: 0.85;
+    }
+    .phone2-screen { background: #080808; padding: 28px 18px; min-height: 360px; }
+    .phone2-logo { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 2px; color: #fff; margin-bottom: 20px; }
+    .phone2-logo span { color: var(--lime); }
+    .qr-box { background: #fff; border-radius: 12px; padding: 12px; margin-bottom: 12px; }
+    .qr-inner { width: 100%; aspect-ratio: 1; background: #0a0a0a; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+    .qr-svg { width: 100px; height: 100px; }
+    .qr-label { text-align: center; font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 1.5px; color: #111; margin-top: 8px; }
+    .qr-label span { color: #88bb00; }
+    .tabs { display: flex; gap: 6px; margin-top: 10px; }
+    .tab { flex: 1; text-align: center; font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 6px 4px; border-radius: 8px; }
+    .tab.active { background: var(--lime); color: #000; }
+    .tab.inactive { background: #1a1a1a; color: var(--muted); }
+
+    /* SECTIONS */
+    section { padding: 100px 60px; }
+    .section-tag { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--lime); margin-bottom: 14px; }
+    h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(38px, 5vw, 58px); letter-spacing: 2px; color: #fff; line-height: 1; margin-bottom: 56px; }
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 0 60px; }
+
+    /* HOW IT WORKS */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2px; }
+    .step { background: var(--card); padding: 36px 28px; position: relative; transition: background 0.3s; }
+    .step:hover { background: #1a1a1a; }
+    .step-num { font-family: 'Bebas Neue', sans-serif; font-size: 64px; color: rgba(204,255,0,0.1); line-height: 1; margin-bottom: 20px; }
+    .step-icon { font-size: 26px; margin-bottom: 14px; }
+    .step h3 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+    .step p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+    .step-bar { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--lime); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+    .step:hover .step-bar { transform: scaleX(1); }
+
+    /* FEATURES */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    .feat { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; transition: border-color 0.3s, transform 0.3s; }
+    .feat:hover { border-color: rgba(204,255,0,0.25); transform: translateY(-4px); }
+    .feat-icon { width: 48px; height: 48px; background: rgba(204,255,0,0.08); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 20px; }
+    .feat h3 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+    .feat p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+    /* USE CASES */
+    .usecases-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+    .uc { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 20px; text-align: center; transition: border-color 0.3s; }
+    .uc:hover { border-color: rgba(204,255,0,0.3); }
+    .uc-icon { font-size: 28px; margin-bottom: 10px; }
+    .uc h4 { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+    .uc p { font-size: 12px; color: var(--muted); }
+
+    /* PRIVACY */
+    .privacy-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+    .privacy-box { background: var(--card); border: 1px solid rgba(204,255,0,0.12); border-radius: 20px; padding: 40px; }
+    .privacy-box h3 { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; color: #fff; margin-bottom: 16px; }
+    .privacy-box p { font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 20px; }
+    .check-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .check-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; color: var(--text); line-height: 1.6; }
+    .check-list li::before { content: '✓'; color: var(--lime); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+    .sms-info { background: rgba(204,255,0,0.04); border: 1px solid rgba(204,255,0,0.1); border-radius: 16px; padding: 32px; }
+    .sms-info h3 { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: #fff; margin-bottom: 12px; }
+    .sms-info p { font-size: 13px; color: var(--muted); line-height: 1.8; margin-bottom: 16px; }
+    .msg-bubble { background: #1a1a1a; border-radius: 12px; padding: 16px 20px; font-size: 13px; color: var(--text); border-left: 3px solid var(--lime); font-family: monospace; }
+
+    /* CONTACT */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+    .contact-text p { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 32px; }
+    .contact-item { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+    .c-icon { width: 40px; height: 40px; background: rgba(204,255,0,0.08); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .contact-item span { font-size: 14px; color: var(--text); }
+    .contact-item a { font-size: 14px; color: var(--lime); text-decoration: none; }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 32px 60px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    footer p { font-size: 12px; color: var(--muted); }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: 12px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--lime); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);} }
+    .reveal { opacity:0; transform:translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 18px 24px; }
+      nav ul { display: none; }
+      .hero { grid-template-columns: 1fr; padding: 110px 24px 60px; gap: 40px; }
+      .hero-right { justify-content: flex-start; }
+      .phone2 { display: none; }
+      section { padding: 72px 24px; }
+      hr.divider { margin: 0 24px; }
+      .privacy-wrap, .contact-grid { grid-template-columns: 1fr; }
+      footer { padding: 24px; flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">STI<span>QR</span>.</div>
+  <ul>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#privacy">Privacy</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="badge"><span class="dot"></span> Privacy-First Lost &amp; Found</div>
+    <h1>LOST IT?<br><span class="lime">FIND</span><br>IT.</h1>
+    <p class="hero-desc">
+      STIQR turns your valuables into smart, privacy-protected items. Attach a QR sticker — if something's lost, a finder can reach you instantly without ever seeing your real phone number.
+    </p>
+    <div class="btns">
+      <a href="#how" class="btn-lime">See How It Works</a>
+      <a href="#contact" class="btn-outline">Contact Us</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-logo">STI<span>QR</span>.</div>
+          <div class="phone-title">ENTER YOUR<br>PHONE</div>
+          <div class="phone-sub">We will send a code to verify your account.</div>
+          <div class="phone-input">+1 (555) 000-0000</div>
+          <div class="phone-btn">SEND OTP</div>
+        </div>
+      </div>
+      <div class="phone2">
+        <div class="phone2-screen">
+          <div class="phone2-logo">STI<span>QR</span>.</div>
+          <div class="qr-box">
+            <div class="qr-inner">
+              <svg class="qr-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="5" y="5" width="30" height="30" rx="3" fill="#CCFF00"/>
+                <rect x="9" y="9" width="22" height="22" rx="1" fill="#080808"/>
+                <rect x="13" y="13" width="14" height="14" rx="1" fill="#CCFF00"/>
+                <rect x="65" y="5" width="30" height="30" rx="3" fill="#CCFF00"/>
+                <rect x="69" y="9" width="22" height="22" rx="1" fill="#080808"/>
+                <rect x="73" y="13" width="14" height="14" rx="1" fill="#CCFF00"/>
+                <rect x="5" y="65" width="30" height="30" rx="3" fill="#CCFF00"/>
+                <rect x="9" y="69" width="22" height="22" rx="1" fill="#080808"/>
+                <rect x="13" y="73" width="14" height="14" rx="1" fill="#CCFF00"/>
+                <rect x="42" y="5" width="6" height="6" fill="#CCFF00"/>
+                <rect x="50" y="5" width="6" height="6" fill="#CCFF00"/>
+                <rect x="42" y="13" width="6" height="6" fill="#CCFF00"/>
+                <rect x="50" y="21" width="6" height="6" fill="#CCFF00"/>
+                <rect x="42" y="42" width="6" height="6" fill="#CCFF00"/>
+                <rect x="50" y="42" width="6" height="6" fill="#CCFF00"/>
+                <rect x="58" y="42" width="6" height="6" fill="#CCFF00"/>
+                <rect x="42" y="50" width="6" height="6" fill="#CCFF00"/>
+                <rect x="58" y="58" width="6" height="6" fill="#CCFF00"/>
+                <rect x="50" y="58" width="6" height="6" fill="#CCFF00"/>
+                <rect x="65" y="42" width="6" height="6" fill="#CCFF00"/>
+                <rect x="81" y="42" width="6" height="6" fill="#CCFF00"/>
+                <rect x="65" y="50" width="6" height="6" fill="#CCFF00"/>
+                <rect x="73" y="58" width="6" height="6" fill="#CCFF00"/>
+                <rect x="81" y="65" width="6" height="6" fill="#CCFF00"/>
+                <rect x="65" y="73" width="6" height="6" fill="#CCFF00"/>
+              </svg>
+            </div>
+            <div class="qr-label">STI<span>QR</span>.</div>
+          </div>
+          <div class="tabs">
+            <div class="tab active">Vertical</div>
+            <div class="tab inactive">Round</div>
+            <div class="tab inactive">Strip</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-tag">How It Works</div>
+  <h2 class="reveal">FOUR SIMPLE STEPS</h2>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-bar"></div>
+      <div class="step-num">01</div>
+      <div class="step-icon">📱</div>
+      <h3>Register with your phone</h3>
+      <p>Sign up using your mobile number. A one-time OTP is sent via SMS to verify your identity — secure and instant.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-bar"></div>
+      <div class="step-num">02</div>
+      <div class="step-icon">🏷️</div>
+      <h3>Get your STIQR sticker</h3>
+      <p>A unique QR code is generated and assigned to your account. Download and print your sticker in Vertical, Round, or Strip format.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-bar"></div>
+      <div class="step-num">03</div>
+      <div class="step-icon">📷</div>
+      <h3>Finder scans the QR</h3>
+      <p>If someone finds your lost item, they scan the STIQR code with any smartphone camera — no app download required to scan.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-bar"></div>
+      <div class="step-num">04</div>
+      <div class="step-icon">🔒</div>
+      <h3>Connect via masked call</h3>
+      <p>The finder reaches you through our Twilio toll-free relay. Neither party's real number is ever revealed to the other.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-tag">Features</div>
+  <h2 class="reveal">BUILT FOR PRIVACY</h2>
+  <div class="features-grid">
+    <div class="feat reveal">
+      <div class="feat-icon">🛡️</div>
+      <h3>Masked Calling</h3>
+      <p>All calls between finder and owner are routed through a Twilio toll-free number. Your real phone number stays completely private.</p>
+    </div>
+    <div class="feat reveal">
+      <div class="feat-icon">📲</div>
+      <h3>Phone-Based Identity</h3>
+      <p>Your mobile number is your STIQR identity. Secure OTP login via SMS ensures only you can access your account.</p>
+    </div>
+    <div class="feat reveal">
+      <div class="feat-icon">⚡</div>
+      <h3>Instant Connection</h3>
+      <p>The moment your QR is scanned, you're notified and connected — no delays, no complicated steps for the person who found your item.</p>
+    </div>
+    <div class="feat reveal">
+      <div class="feat-icon">🎨</div>
+      <h3>Custom Sticker Styles</h3>
+      <p>Choose Vertical, Round, or Strip sticker formats to fit any item. Download and print directly from the STIQR app dashboard.</p>
+    </div>
+    <div class="feat reveal">
+      <div class="feat-icon">📋</div>
+      <h3>Scan History</h3>
+      <p>View a complete log of every time your QR code was scanned — know when and where your items were found.</p>
+    </div>
+    <div class="feat reveal">
+      <div class="feat-icon">🆓</div>
+      <h3>Free to Use</h3>
+      <p>STIQR is completely free right now. Our mission is to make privacy-first lost &amp; found recovery accessible to everyone.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- USE CASES -->
+<section>
+  <div class="section-tag">Use Cases</div>
+  <h2 class="reveal">STICK IT ON ANYTHING</h2>
+  <div class="usecases-grid">
+    <div class="uc reveal"><div class="uc-icon">🔑</div><h4>Keys</h4><p>Most commonly lost item — now always returnable.</p></div>
+    <div class="uc reveal"><div class="uc-icon">🎒</div><h4>Bags &amp; Luggage</h4><p>Travel knowing your bags can find their way back.</p></div>
+    <div class="uc reveal"><div class="uc-icon">🐾</div><h4>Pet Collars</h4><p>A smarter pet tag connecting finders to owners privately.</p></div>
+    <div class="uc reveal"><div class="uc-icon">🚲</div><h4>Bikes &amp; Scooters</h4><p>Quick recovery if stolen or misplaced around the city.</p></div>
+    <div class="uc reveal"><div class="uc-icon">💻</div><h4>Laptops &amp; Gadgets</h4><p>Protect expensive electronics with a discreet sticker.</p></div>
+    <div class="uc reveal"><div class="uc-icon">👜</div><h4>Wallets</h4><p>Thin sticker fits inside — found wallets come home.</p></div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PRIVACY & SMS -->
+<section id="privacy">
+  <div class="section-tag">Privacy &amp; SMS Use</div>
+  <h2 class="reveal">YOUR PRIVACY IS OUR PRODUCT</h2>
+  <div class="privacy-wrap">
+    <div class="privacy-box reveal">
+      <h3>Data &amp; Privacy Policy</h3>
+      <p>STIQR is built around the belief that recovering a lost item should never require giving a stranger your personal information. We collect only the minimum data needed to operate the service.</p>
+      <ul class="check-list">
+        <li>Your mobile number is stored securely to power your account identity — it is never shared with other users or third parties.</li>
+        <li>All calls between finders and owners are routed through a masked relay number. Neither party's real number is ever revealed.</li>
+        <li>We do not sell, share, or monetize your personal data with any third parties.</li>
+        <li>You can delete your account and all associated data at any time from within the app.</li>
+        <li>SMS OTP messages are used solely for account verification and login authentication — never for marketing.</li>
+        <li>We comply with all applicable US telecommunications and privacy regulations.</li>
+      </ul>
+    </div>
+
+    <div class="sms-info reveal">
+      <h3>How We Use SMS</h3>
+      <p>STIQR uses SMS exclusively for one-time password (OTP) verification during account registration and login. We do not send promotional, marketing, or unsolicited messages of any kind.</p>
+      <p><strong style="color:#fff;">Message frequency:</strong> One SMS per login or registration attempt, sent only when explicitly requested by the user.</p>
+      <p><strong style="color:#fff;">Sample verification message:</strong></p>
+      <div class="msg-bubble">Your STIQR verification code is 847291. Valid for 10 minutes. Do not share this code with anyone.</div>
+      <p style="margin-top:16px"><strong style="color:#fff;">Opt-out:</strong> Reply STOP to unsubscribe from SMS messages at any time. Reply HELP for support.</p>
+      <p>Standard message and data rates may apply. STIQR uses Twilio toll-free SMS services for reliable, compliant message delivery across the United States and Canada.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-tag">Contact</div>
+  <h2 class="reveal">GET IN TOUCH</h2>
+  <div class="contact-grid">
+    <div class="contact-text reveal">
+      <p>STIQR is an independent app built by a solo developer on a mission to make privacy-first lost &amp; found accessible to everyone. We're early stage, growing, and always happy to hear from users, partners, or press.</p>
+      <div class="contact-item">
+        <div class="c-icon">✉️</div>
+        <a href="mailto:support@stiqr.app">support@stiqr.app</a>
+      </div>
+      <div class="contact-item">
+        <div class="c-icon">🌐</div>
+        <span>stiqr.app</span>
+      </div>
+      <div class="contact-item">
+        <div class="c-icon">📍</div>
+        <span>United States</span>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:40px;">
+        <h3 style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:#fff;margin-bottom:8px;">ABOUT STIQR</h3>
+        <p style="font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:20px;">
+          STIQR (pronounced "sticker") is a mobile application available on Android and iOS. The app enables users to protect their valuables by attaching smart QR stickers that allow finders to contact owners anonymously through masked calling — powered by Twilio's toll-free number infrastructure.
+        </p>
+        <p style="font-size:14px;color:var(--muted);line-height:1.8;">
+          The service is currently free to use. Our goal is to keep it free forever while maintaining the highest standards of user privacy and data security.
+        </p>
+        <div style="margin-top:24px;padding-top:24px;border-top:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;">
+          <span style="background:rgba(204,255,0,0.08);border:1px solid rgba(204,255,0,0.15);color:var(--lime);font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:7px 14px;border-radius:100px;">Lost &amp; Found</span>
+          <span style="background:rgba(204,255,0,0.08);border:1px solid rgba(204,255,0,0.15);color:var(--lime);font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:7px 14px;border-radius:100px;">Privacy Tech</span>
+          <span style="background:rgba(204,255,0,0.08);border:1px solid rgba(204,255,0,0.15);color:var(--lime);font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:7px 14px;border-radius:100px;">QR Technology</span>
+          <span style="background:rgba(204,255,0,0.08);border:1px solid rgba(204,255,0,0.15);color:var(--lime);font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:7px 14px;border-radius:100px;">Masked Calling</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">STI<span>QR</span>.</div>
+  <p>© 2025 STIQR. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="#privacy">Privacy Policy</a>
+    <a href="#contact">Terms of Use</a>
+    <a href="#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
